@@ -40,6 +40,87 @@ namespace SuperShopTestProject.Services
         }
 
         [TestMethod]
+        public void When_agreement_is_valid_discount_should_be_used_for_lower_price()
+        {
+            //ARRANGE
+            var productList = new List<ProductServiceModel>
+            {
+                new ProductServiceModel
+                {
+                    BasePrice = 100,
+                    Name = "XTS Hybrid",
+                    CategoryName = "van",
+                    ManufacturerName = "Bugatti",
+                }
+            };
+            var customerContext = new CurrentCustomerContext
+            {
+                Agreements = new List<Agreement>
+                {
+                    new Agreement
+                    {
+                        Id = 1,
+                        ValidFrom = DateTime.Now.Date.AddDays(-5),
+                        ValidTo = DateTime.Now.Date.AddDays(5),
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow
+                            {
+                                Id = 1,
+                                CategoryMatch = "van",
+                                ManufacturerMatch = "Bugatti",
+                                PercentageDiscount = 6.0m
+                            }
+                        }
+                    }
+                }
+            };
+            //ACT
+            var products = _sut.CalculatePrices(productList, customerContext);
+            //ASSERT
+            Assert.AreEqual(94, products.First().Price);
+        }
+        [TestMethod]
+        public void When_agreement_is_Not_valid_discount_should_Not_be_used_for_lower_price()
+        {
+            //ARRANGE
+            var productList = new List<ProductServiceModel>
+            {
+                new ProductServiceModel{
+                    BasePrice = 100,
+                    Name = "XTS Hybrid",
+                    CategoryName = "van",
+                    ManufacturerName = "Bugatti",
+                }
+            };
+            var customerContext = new CurrentCustomerContext
+            {
+                Agreements = new List<Agreement>
+                {
+                    new Agreement
+                    {
+                        Id = 1,
+                        ValidFrom = DateTime.Now.Date.AddDays(-5),
+                        ValidTo = DateTime.Now.Date.AddDays(-2),
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow
+                            {
+                                Id = 1,
+                                CategoryMatch = "van",
+                                ManufacturerMatch = "Bugatti",
+                                PercentageDiscount = 6.0m
+                            }
+                        }
+                    }
+                }
+            };
+            //ACT
+            var products = _sut.CalculatePrices(productList, customerContext);
+            //ASSERT
+            Assert.AreEqual(100, products.First().Price);
+        }
+        [TestMethod]
         public void When_multiple_agreements_exists_the_lowest_price_should_be_used()
         {
             //ARRANGE
