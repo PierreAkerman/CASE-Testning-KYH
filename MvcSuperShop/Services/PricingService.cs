@@ -7,12 +7,6 @@ namespace MvcSuperShop.Services;
 
 public class PricingService : IPricingService
 {
-    private readonly ApplicationDbContext _context;
-
-    public PricingService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
     public IEnumerable<ProductServiceModel> CalculatePrices(IEnumerable<ProductServiceModel> products, CurrentCustomerContext customerContext)
     {
         foreach (var product in products)
@@ -30,7 +24,6 @@ public class PricingService : IPricingService
                             if (price < lowest)
                                 lowest = Convert.ToInt32(Math.Round(price, 0));
                         }
-
                     }
                 }
             }
@@ -44,14 +37,21 @@ public class PricingService : IPricingService
         var productCheck = !string.IsNullOrEmpty(agreementRow.ProductMatch);
         var categoryCheck = !string.IsNullOrEmpty(agreementRow.CategoryMatch);
         var manufacturerCheck = !string.IsNullOrEmpty(agreementRow.ManufacturerMatch);
+
         if (productCheck && !product.Name.ToLower().Contains(agreementRow.ProductMatch.ToLower()))
             return false;
-        if (categoryCheck && !product.Name.ToLower().Contains(agreementRow.CategoryMatch.ToLower()))
+        if (categoryCheck && !product.CategoryName.ToLower().Contains(agreementRow.CategoryMatch.ToLower()))
             return false;
-        if (manufacturerCheck && !product.Name.ToLower().Contains(agreementRow.ManufacturerMatch.ToLower()))
+        if (manufacturerCheck && !product.ManufacturerName.ToLower().Contains(agreementRow.ManufacturerMatch.ToLower()))
             return false;
 
         return true;
+    }
 
+    public bool AgreementIsValid(Agreement agreement)
+    {
+        if(agreement.ValidFrom < DateTime.Now && agreement.ValidTo > DateTime.Now)
+            return true;
+        return false;
     }
 }
