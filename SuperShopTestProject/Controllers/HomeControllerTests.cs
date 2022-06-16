@@ -26,6 +26,7 @@ namespace SuperShopTestProject.Controllers
         private Mock<IProductService> productServiceMock;
         private Mock<IMapper> mapperMock;
         private ApplicationDbContext context;
+
         [TestInitialize]
         public void Initialize()
         {
