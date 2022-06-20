@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcSuperShop", "MvcSuperSho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperShopTestProject", "SuperShopTestProject\SuperShopTestProject.csproj", "{8BEE4DA4-0DB2-4103-86F0-A917B6990A56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSuperShop.IntegrationTests", "MvcSuperShop.IntegrationTests\MvcSuperShop.IntegrationTests.csproj", "{288EBECF-FAA8-4D38-AA4F-7D545BDB44CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcSuperShop.IntegrationTests", "MvcSuperShop.IntegrationTests\MvcSuperShop.IntegrationTests.csproj", "{288EBECF-FAA8-4D38-AA4F-7D545BDB44CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

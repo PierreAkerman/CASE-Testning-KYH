@@ -321,5 +321,72 @@ namespace SuperShopTestProject.Services
             var result = _sut.AgreementIsValid(customer.Agreements.First());
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void When_multiple_agreements_exists_the_lowest_price_should_be_used_Testing_by_category_Volvo()
+        {
+            //ARRANGE
+            var productList = new List<ProductServiceModel>
+            {
+                new ProductServiceModel{
+                    BasePrice = 100,
+                    Name = "XTS Hybrid",
+                    CategoryName = "volvo",
+                    ManufacturerName = "Bugatti",
+                }
+            };
+            var customerContext = new CurrentCustomerContext
+            {
+                Agreements = new List<Agreement>
+                {
+                    new Agreement
+                    {
+                        Id = 1,
+                        ValidFrom = DateTime.Now.Date.AddDays(-5),
+                        ValidTo = DateTime.Now.Date.AddDays(5),
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow
+                            {
+                                Id = 1,
+                                CategoryMatch = "van",
+                                PercentageDiscount = 6.0m
+                            },
+                            new AgreementRow
+                            {
+                                Id = 2,
+                                ProductMatch = "hybrid",
+                                PercentageDiscount = 5.0m
+                            }
+                        }
+                    },
+                    new Agreement
+                    {
+                        Id = 2,
+                        ValidFrom = DateTime.Now.Date.AddDays(-5),
+                        ValidTo = DateTime.Now.Date.AddDays(5),
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow
+                            {
+                                Id = 3,
+                                CategoryMatch = "volvo",
+                                PercentageDiscount = 10.0m
+                            },
+                            new AgreementRow
+                            {
+                                Id = 4,
+                                ProductMatch = "hybrid",
+                                PercentageDiscount = 4.0m
+                            }
+                        }
+                    }
+                }
+            };
+            //ACT
+            var products = _sut.CalculatePrices(productList, customerContext);
+            //ASSERT
+            Assert.AreEqual(90, products.First().Price);
+        }
     }
 }
