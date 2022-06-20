@@ -42,14 +42,14 @@ public class PricingService : IPricingService
         var categoryCheck = !string.IsNullOrEmpty(agreementRow.CategoryMatch);
         var manufacturerCheck = !string.IsNullOrEmpty(agreementRow.ManufacturerMatch);
 
-        if (productCheck && !product.Name.ToLower().Contains(agreementRow.ProductMatch.ToLower()))
-            return false;
-        if (categoryCheck && !product.CategoryName.ToLower().Contains(agreementRow.CategoryMatch.ToLower()))
-            return false;
-        if (manufacturerCheck && !product.ManufacturerName.ToLower().Contains(agreementRow.ManufacturerMatch.ToLower()))
-            return false;
+        if (productCheck && product.Name.ToLower().Contains(agreementRow.ProductMatch.ToLower()))
+            return true;
+        if (categoryCheck && product.CategoryName.ToLower().Contains(agreementRow.CategoryMatch.ToLower()))
+            return true;
+        if (manufacturerCheck && product.ManufacturerName.ToLower().Contains(agreementRow.ManufacturerMatch.ToLower()))
+            return true;
 
-        return true;
+        return false;
     }
 
     public bool AgreementIsValid(Agreement agreement)
